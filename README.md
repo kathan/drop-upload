@@ -3,12 +3,12 @@ A Handler To Receive Drag-And-Drop Files and Upload Those Files.
 
 ## Usage
 ### HTML
-`<html>
-  <head>
-    <script src="../drop-upload.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
-    <script src="DUCtrl.js"></script>
-    <style>
+`&lt;html&gt;
+  &lt;head&gt;
+    &lt;script src="../drop-upload.js"&gt;&lt;/script&gt;
+    &lt;script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"&gt;&lt;/script&gt;
+    &lt;script src="DUCtrl.js"&gt;&lt;/script&gt;
+    &lt;style&gt;
     body{
       font-family: sans-serif;
     }
@@ -39,24 +39,24 @@ A Handler To Receive Drag-And-Drop Files and Upload Those Files.
       overflow: hidden;
     }
     
-    </style>
-  </head>
-  <body ng-app="DUApp" ng-controller="DUCtrl">
-    <div id="debug"></div>
-    <div id="du" class="du">
-      <span>Drop files here</span>
-    </div>
-    <button ng-click="upload()">Upload</button>
-    <ul id="files" ng-repeat="file in files">
-      <li>
+    &lt;/style&gt;
+  &lt;/head&gt;
+  &lt;body ng-app="DUApp" ng-controller="DUCtrl"&gt;
+    &lt;div id="debug"&gt;&lt;/div&gt;
+    &lt;div id="du" class="du"&gt;
+      &lt;span&gt;Drop files here&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;button ng-click="upload()"&gt;Upload&lt;/button&gt;
+    &lt;ul id="files" ng-repeat="file in files"&gt;
+      &lt;li&gt;
         {{file.name}}
-        <div class="progress-frame">
-          <div ng-style="{'border-top': '1px solid #3886d8', 'border-bottom': '1px solid #3886d8','border-radius':'5px','background-color':'419bf9','height':'3px','width': file.progress*2}"></div>
-        </div>
-      </li>
-    </ul>
-  </body>
-</html>`
+        &lt;div class="progress-frame"&gt;
+          &lt;div ng-style="{'border-top': '1px solid #3886d8', 'border-bottom': '1px solid #3886d8','border-radius':'5px','background-color':'419bf9','height':'3px','width': file.progress*2}"&gt;&lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/body&gt;
+&lt;/html&gt;`
 ### Javascript (Using Angular)
 `var DUApp = angular.module("DUApp",[]);
 
