@@ -12,7 +12,8 @@ A Handler To Receive Drag-And-Drop Files and Upload Those Files.
     body{
       font-family: sans-serif;
     }
-    #files{
+    
+    &#35;files{
       list-style: none;
     }
     
@@ -32,10 +33,10 @@ A Handler To Receive Drag-And-Drop Files and Upload Those Files.
     }
     
     .progress-frame{
-      background-color: #dbdbdb;
+      background-color: &#35;dbdbdb;
       width: 200px;
       border-radius: 3px;
-      border: 1px solid #c0c0c0;
+      border: 1px solid &#35;c0c0c0;
       overflow: hidden;
     }
     
@@ -51,7 +52,7 @@ A Handler To Receive Drag-And-Drop Files and Upload Those Files.
       &lt;li&gt;
         {{file.name}}
         &lt;div class="progress-frame"&gt;
-          &lt;div ng-style="{'border-top': '1px solid #3886d8', 'border-bottom': '1px solid #3886d8','border-radius':'5px','background-color':'419bf9','height':'3px','width': file.progress*2}"&gt;&lt;/div&gt;
+          &lt;div ng-style="{'border-top': '1px solid &#35;3886d8', 'border-bottom': '1px solid &#35;3886d8','border-radius':'5px','background-color':'419bf9','height':'3px','width': file.progress*2}"&gt;&lt;/div&gt;
         &lt;/div&gt;
       &lt;/li&gt;
     &lt;/ul&gt;
