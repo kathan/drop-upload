@@ -76,12 +76,12 @@ DUApp.controller('DUCtrl', function ($scope, $http, $rootScope){
   });
   
   du.addEventListener('error', (e) => {
-    $('#debug').text('Some bad stuff happened');
+    alert('Some bad stuff happened');
   });
   
   $scope.upload = function(){
     du.upload('http://your-server.url/that/receives/uploads', (e) => {
-      var i = 0;
+      alert('Upload complete');
     });
   }
 });
