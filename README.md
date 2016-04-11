@@ -60,7 +60,8 @@ A Handler To Receive Drag-And-Drop Files and Upload Those Files.
 </html>
 ```
 ### Javascript (Using Angular)
-`var DUApp = angular.module("DUApp",[]);
+```javascript
+var DUApp = angular.module("DUApp",[]);
 
 DUApp.controller('DUCtrl', function ($scope, $http, $rootScope){
   var du = DropUpload({targetElement: '#du', hoverClass: 'my-class'});
@@ -83,5 +84,5 @@ DUApp.controller('DUCtrl', function ($scope, $http, $rootScope){
       var i = 0;
     });
   }
-});`
-
+});
+```
