@@ -3,7 +3,8 @@ A Handler To Receive Drag-And-Drop Files and Upload Those Files.
 
 ## Usage
 ### HTML
-```<html>
+```html
+<html>
   <head>
     <script src="../drop-upload.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
@@ -56,7 +57,8 @@ A Handler To Receive Drag-And-Drop Files and Upload Those Files.
       </li>
     </ul>
   </body>
-</html>```
+</html>
+```
 ### Javascript (Using Angular)
 `var DUApp = angular.module("DUApp",[]);
 
