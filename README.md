@@ -1,5 +1,5 @@
 # drop-upload
-A Handler To Receive Drag-And-Drop Files and Upload Those Files.
+A handler to receive drag-and-drop files, upload the files and monitor the progress those Files.
 
 ## Usage
 ### HTML
