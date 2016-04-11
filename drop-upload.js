@@ -24,23 +24,23 @@ function DropUpload(args) {
   args.formElement ? form_data = document.querySelector(args.formElement) : null;
   args.dropped ? drop_el.addEventListener('dropped', args.dropped) : '';
   
-  drop_el.addEventListener('dragenter', (e) => {
+  drop_el.addEventListener('dragenter', function(e) {
     addClass(du_hover);
     e.stopPropagation();
     e.preventDefault();
   });
   
-  drop_el.addEventListener('dragend', (e) => {
+  drop_el.addEventListener('dragend', function(e) {
     removeClass(du_hover);
   });
   
-  drop_el.addEventListener('dragleave', (e) => {
+  drop_el.addEventListener('dragleave', function(e) {
     removeClass(du_hover);
     e.stopPropagation();
     e.preventDefault();
   });
 
-  drop_el.addEventListener('dragover', (e) => {
+  drop_el.addEventListener('dragover', function(e) {
     addClass(du_hover);
     e.stopPropagation();
     e.preventDefault();
@@ -80,9 +80,9 @@ function DropUpload(args) {
     }
   }
 
-  drop_el.addEventListener('drop', (e) => {
+  drop_el.addEventListener('drop', function(e) {
     var l_files = e.dataTransfer.files;
-    window.setTimeout(() => {
+    window.setTimeout(function() {
       removeClass(du_hover);
       e.preventDefault();
       drop_el.dispatchEvent(new Event('drop_start'));
@@ -92,7 +92,7 @@ function DropUpload(args) {
         if (file instanceof File && !findFile(file)) {
           file.progress = 0;
           files.push(file);
-          file.addForm = (form) => {
+          file.addForm = function(form) {
             document.querySelector(this).data('form', form);
           };
           drop_el.dispatchEvent(new CustomEvent('file-dropped', {detail: file}));
@@ -103,18 +103,18 @@ function DropUpload(args) {
     }, 0);
   }, false);
 
-  document.addEventListener('dragenter', (e) => {
+  document.addEventListener('dragenter', function(e) {
     e.stopPropagation();
     e.preventDefault();
   });
 
-  document.addEventListener('dragover', (e) => {
+  document.addEventListener('dragover', function(e) {
     e.stopPropagation();
     e.preventDefault();
 
   });
 
-  document.addEventListener('drop', (e) => {
+  document.addEventListener('drop', function(e) {
     e.stopPropagation();
     e.preventDefault();
   });
@@ -133,7 +133,7 @@ function DropUpload(args) {
 
       sending.push(file.name);
       drop_el.dispatchEvent(new CustomEvent('upload-start', {'detail': form_data}));
-      sendFileToServer(uploadURL, file, form_data, (data, s, xhr) => {
+      sendFileToServer(uploadURL, file, form_data, function(data, s, xhr) {
         var idx = sending.indexOf(file.name);
         idx > -1 ? sending.splice(i, 1) : '';
         if (sending.length === 0) {
@@ -164,7 +164,7 @@ function DropUpload(args) {
 
   drop_el.removeByName = function(name) {
     for (var i = 0; files.length > i; i++) {
-      if (files[i].name == name) {
+      if (files[i].name === name) {
         files.splice(i, 1);
       }
     }
@@ -173,19 +173,19 @@ function DropUpload(args) {
   function sendFileToServer (uploadURL, file, formData, cb) {
     var xhr = new XMLHttpRequest();
 
-    xhr.upload.addEventListener("abort", (e) =>{
+    xhr.upload.addEventListener("abort", function(e){
       drop_el.dispatchEvent(new CustomEvent('abort', {'detail': file}));
     });
 
-    xhr.upload.addEventListener("error", (e) => {
+    xhr.upload.addEventListener("error", function(e) {
       drop_el.dispatchEvent(new CustomEvent('progress', {'detail': file}));
     });
 
-    xhr.upload.addEventListener("load", (e) => {
+    xhr.upload.addEventListener("load", function(e) {
       drop_el.dispatchEvent(new CustomEvent('load', {'detail': file}));
     });
     
-    xhr.upload.addEventListener('progress', (event) => {
+    xhr.upload.addEventListener('progress', function(event) {
       var position = event.loaded || event.position,
           total = event.total;
       file.progress = Math.ceil(position / total * 100);
