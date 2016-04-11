@@ -3,38 +3,7 @@
     <script src="../drop-upload.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
     <script src="DUCtrl.js"></script>
-    <style>
-    body{
-      font-family: sans-serif;
-    }
-    #files{
-      list-style: none;
-    }
-    
-    .du{
-      vertical-align:middle;
-      line-height: 100px;
-      text-align: center;
-      width: 350px;
-      height: 100px;
-      color: grey;
-      border: 1px dotted grey;
-    }
-    
-    .my-class{
-      color: black;
-      border: 1px solid black;
-    }
-    
-    .progress-frame{
-      background-color: #dbdbdb;
-      width: 200px;
-      border-radius: 3px;
-      border: 1px solid #c0c0c0;
-      overflow: hidden;
-    }
-    
-    </style>
+    <link href="du.css" rel="stylesheet" />
   </head>
   <body ng-app="DUApp" ng-controller="DUCtrl">
     <div id="debug"></div>
@@ -46,6 +15,7 @@
       <li>
         {{file.name}}
         <div class="progress-frame">
+          <!-- The progress bar below will be update every time the uploader receives a 'progress' event -->
           <div ng-style="{'border-top': '1px solid #3886d8', 'border-bottom': '1px solid #3886d8','border-radius':'5px','background-color':'419bf9','height':'3px','width': file.progress*2}"></div>
         </div>
       </li>
