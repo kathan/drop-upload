@@ -1,0 +1,30 @@
+body{
+  font-family: sans-serif;
+}
+
+#files{
+  list-style: none;
+}
+
+.du{
+  vertical-align:middle;
+  line-height: 100px;
+  text-align: center;
+  width: 350px;
+  height: 100px;
+  color: grey;
+  border: 1px dotted grey;
+}
+
+.my-class{
+  color: black;
+  border: 1px solid black;
+}
+
+.progress-frame{
+  background-color: #dbdbdb;
+  width: 200px;
+  border-radius: 3px;
+  border: 1px solid #c0c0c0;
+  overflow: hidden;
+}
