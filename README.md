@@ -1,5 +1,5 @@
 # drop-upload
-A handler to receive drag-and-drop files, upload the files and monitor the progress those Files.
+A dependency free library to receive drag-and-drop files, upload the files and monitor the progress those Files.
 
 ## Usage
 ### HTML
