@@ -15,63 +15,52 @@
 
 function DropUpload(args) {
   var drop_el = document.querySelector(args.targetElement),
+      file_cb = null,
       files = [],
-      du_hover = args.hoverClass || 'du-hover',
+      du_hover = 'du-hover',
       uploading = false,
-      form_data,
-      class_name_ary;
+      form_data;
+  if(!drop_el){
+    throw new Error(`Cannot find element ${args.targetElement}`);
+  }
       
+  args.fileCallback ? file_cb = document.querySelector(args.fileCallback) : null,
   args.formElement ? form_data = document.querySelector(args.formElement) : null;
   args.dropped ? drop_el.addEventListener('dropped', args.dropped) : '';
   
-  drop_el.addEventListener('dragenter', function(e) {
-    addClass(du_hover);
+  drop_el.addEventListener('dragenter', function(e){
+    $(drop_el).addClass(du_hover);
     e.stopPropagation();
     e.preventDefault();
   });
   
-  drop_el.addEventListener('dragend', function(e) {
-    removeClass(du_hover);
+  drop_el.addEventListener('dragend', function(e){
+    $(drop_el).removeClass(du_hover);
+    e.stopPropagation();
+    e.preventDefault();
   });
   
-  drop_el.addEventListener('dragleave', function(e) {
-    removeClass(du_hover);
+  drop_el.addEventListener('dragleave', function(e){
+    $(drop_el).removeClass(du_hover);
+    e.stopPropagation();
+    e.preventDefault();
+  });
+  
+  drop_el.addEventListener('dragexit', function(e){
+    $(drop_el).removeClass(du_hover);
     e.stopPropagation();
     e.preventDefault();
   });
 
-  drop_el.addEventListener('dragover', function(e) {
-    addClass(du_hover);
+  drop_el.addEventListener('dragover', function(e){
+    $(drop_el).addClass(du_hover);
     e.stopPropagation();
     e.preventDefault();
   });
-  
-  function splitName(){
-    if(!class_name_ary){
-      class_name_ary = drop_el.className.split(/ /);
-    }
-  }
-  
-  function addClass(className){
-    splitName();
-    if(class_name_ary.indexOf(className) === -1){
-      class_name_ary.push(className);
-      drop_el.className = class_name_ary.join(' ');
-    }
-  }
-  
-  function removeClass(className){
-    splitName();
-    var idx = class_name_ary.indexOf(className);
-    if(idx > -1){
-      class_name_ary.splice(idx, 1);
-      drop_el.className = class_name_ary.join(' ');
-    }
-  }
-  
+
   function findFile(file) {
     if (files.length > 0) {
-      for(var i in files){
+      for(var i = 0; i < files.length; i++){
         var cur_file = files[i];
         if (cur_file.name === file.name) {
           return cur_file;
@@ -80,72 +69,100 @@ function DropUpload(args) {
     }
   }
 
-  drop_el.addEventListener('drop', function(e) {
+  drop_el.addEventListener('drop', function(e){
     var l_files = e.dataTransfer.files;
-    window.setTimeout(function() {
-      removeClass(du_hover);
+    window.setTimeout(function(){
+      $(drop_el).removeClass(du_hover);
       e.preventDefault();
       drop_el.dispatchEvent(new Event('drop_start'));
       //document.querySelector(self).trigger('drop_start');
-      for(var i in l_files){
-        var file = l_files[i];
-        if (file instanceof File && !findFile(file)) {
-          file.progress = 0;
-          files.push(file);
-          file.addForm = function(form) {
-            document.querySelector(this).data('form', form);
-          };
-          drop_el.dispatchEvent(new CustomEvent('file-dropped', {detail: file}));
-          //self.dispatchEvent(new Event('dropped'), [file]);
+      for (var i = 0; i < l_files.length; i++) {
+        var file = l_files.item(i);
+        if(file_cb && typeof file_cb.toString() === '[object Function]'){
+          file_cb(function(file, reply){
+            if(reply !== false){
+              if (file instanceof File && !findFile(file)) {
+                file.progress = 0;
+                files.push(file);
+                file.addForm = function (form) {
+                  this.form = form;
+                };
+                file.getForm = function () {
+                  return this.form;
+                };
+              }
+            }
+          });
+        }else{
+          if (file instanceof File && !findFile(file)) {
+            file.progress = 0;
+            files.push(file);
+            file.addForm = function (form) {
+              this.form = form;
+            };
+            file.getForm = function () {
+              return this.form;
+            };
+          }
         }
       }
+      
       drop_el.dispatchEvent(new CustomEvent('files-dropped', {detail: files}));
     }, 0);
   }, false);
 
-  document.addEventListener('dragenter', function(e) {
+  document.addEventListener('dragenter', function(e){
     e.stopPropagation();
     e.preventDefault();
   });
 
-  document.addEventListener('dragover', function(e) {
+  document.addEventListener('dragover', function(e){
     e.stopPropagation();
     e.preventDefault();
 
   });
 
-  document.addEventListener('drop', function(e) {
+  document.addEventListener('drop', function(e){
     e.stopPropagation();
     e.preventDefault();
   });
 
+  var sending = [];
   drop_el.upload = function(uploadURL, cb) {
-    var sending = [];
+    
     uploading = true;
-    for(var i in files){
-      var file = files[i];
-      if (typeof form_data === 'object'&& form_data.isPrototypeOf(HTMLFormElement)) {
-        form_data = new FormData(form_data);
-      } else {
-        form_data = new FormData();
-      }
-      form_data.append('file', file);
-
-      sending.push(file.name);
-      drop_el.dispatchEvent(new CustomEvent('upload-start', {'detail': form_data}));
-      sendFileToServer(uploadURL, file, form_data, function(data, s, xhr) {
-        var idx = sending.indexOf(file.name);
-        idx > -1 ? sending.splice(i, 1) : '';
-        if (sending.length === 0) {
-          if (cb && cb.toString() === '[object Function]') {
-            cb();
-          }
-        }
-        drop_el.dispatchEvent(new CustomEvent('uploaded', {'detail': [data, s, xhr, file]}));
-      });
+    for(var i = 0; i < files.length; i++){
+      send_file(uploadURL, files[i], cb);
     }
   };
+  
+  function send_file(uploadURL, file, cb){
+    if(file.form && file.form.toString() === '[object HTMLFormElement]'/* && file.form.isPrototypeOf(HTMLFormElement)*/){
+      //if (typeof form_data === 'object' && form_data.isPrototypeOf(HTMLFormElement)) {
+      form_data = new FormData(file.form);
+    } else {
+      form_data = new FormData();
+    }
+    form_data.append('file', file);
 
+    sending.push(file.name);
+    drop_el.dispatchEvent(new CustomEvent('upload-start', {'detail': form_data}));
+    sendFileToServer(uploadURL, file, form_data, function(data, s, xhr) {
+      var idx = sending.indexOf(file.name);
+      idx > -1 ? sending.splice(idx, 1) : '';
+      if (sending.length === 0) {
+        drop_el.dispatchEvent(new CustomEvent('uploaded'));
+        if (cb && cb.toString() === '[object Function]') {
+          return cb();
+        }
+      }    
+    });
+  };
+  
+  drop_el.getFiles = function(){
+    return files;
+  };
+  
   drop_el.clear = function() {
     files = [];
   };
@@ -172,20 +189,27 @@ function DropUpload(args) {
 
   function sendFileToServer (uploadURL, file, formData, cb) {
     var xhr = new XMLHttpRequest();
-
+  
     xhr.upload.addEventListener("abort", function(e){
       drop_el.dispatchEvent(new CustomEvent('abort', {'detail': file}));
+      cb();
     });
 
-    xhr.upload.addEventListener("error", function(e) {
+    xhr.upload.addEventListener("error", function(e){
       drop_el.dispatchEvent(new CustomEvent('progress', {'detail': file}));
+      cb();
     });
 
-    xhr.upload.addEventListener("load", function(e) {
-      drop_el.dispatchEvent(new CustomEvent('load', {'detail': file}));
+    xhr.addEventListener('load', function(e) {
+      var readyState = xhr.readyState,
+          status = xhr.status;
+      delete files[file.name];
+      drop_el.dispatchEvent(new CustomEvent('load', {detail: {responseType:xhr.responseType, responseText:xhr.responseText, file:file}}));
+      cb();
     });
     
-    xhr.upload.addEventListener('progress', function(event) {
+    //xhr.upload.addEventListener('progress', function(event){
+    xhr.addEventListener('progress', function(event){
       var position = event.loaded || event.position,
           total = event.total;
       file.progress = Math.ceil(position / total * 100);
