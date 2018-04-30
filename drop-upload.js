@@ -17,7 +17,7 @@ function DropUpload(args) {
   var drop_el = document.querySelector(args.targetElement),
       file_cb = null,
       files = [],
-      du_hover = 'du-hover',
+      du_hover = args.hoverClass || 'du-hover',
       uploading = false,
       form_data;
   if(!drop_el){
@@ -29,31 +29,31 @@ function DropUpload(args) {
   args.dropped ? drop_el.addEventListener('dropped', args.dropped) : '';
   
   drop_el.addEventListener('dragenter', function(e){
-    $(drop_el).addClass(du_hover);
+    drop_el.classList.add(du_hover);
     e.stopPropagation();
     e.preventDefault();
   });
   
   drop_el.addEventListener('dragend', function(e){
-    $(drop_el).removeClass(du_hover);
+    drop_el.classList.remove(du_hover);
     e.stopPropagation();
     e.preventDefault();
   });
   
   drop_el.addEventListener('dragleave', function(e){
-    $(drop_el).removeClass(du_hover);
+    drop_el.classList.remove(du_hover);
     e.stopPropagation();
     e.preventDefault();
   });
   
   drop_el.addEventListener('dragexit', function(e){
-    $(drop_el).removeClass(du_hover);
+    drop_el.classList.remove(du_hover);
     e.stopPropagation();
     e.preventDefault();
   });
 
   drop_el.addEventListener('dragover', function(e){
-    $(drop_el).addClass(du_hover);
+    drop_el.classList.add(du_hover);
     e.stopPropagation();
     e.preventDefault();
   });
@@ -72,7 +72,7 @@ function DropUpload(args) {
   drop_el.addEventListener('drop', function(e){
     var l_files = e.dataTransfer.files;
     window.setTimeout(function(){
-      $(drop_el).removeClass(du_hover);
+      drop_el.classList.remove(du_hover);
       e.preventDefault();
       drop_el.dispatchEvent(new Event('drop_start'));
       //document.querySelector(self).trigger('drop_start');
