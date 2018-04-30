@@ -28,8 +28,8 @@ A dependency free library to receive drag-and-drop files, upload the files and m
     }
     
     .my-class{
-      color: black;
-      border: 1px solid black;
+      color: black !important;
+      border: 3px solid black !important;
     }
     
     .progress-frame{
