@@ -13,7 +13,7 @@
 * @license     MIT
 *******************************************/
 
-const DropUpload = function (args) {
+const DropUpload = function(args) {
   var drop_el = document.querySelector(args.targetElement),
       file_cb = null,
       files = [],
